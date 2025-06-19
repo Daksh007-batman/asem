@@ -26,14 +26,12 @@ class Site(models.Model):
     site_type = models.PositiveIntegerField(choices = SITE_TYPE)
     location = models.CharField(max_length=250)
 
-# class aisle_blocks(models.Model):
-#     site_name = models.ForeignKey(Site, on_delete=models.CASCADE)
-#     total_no_of_blocks = models.PositiveIntegerField()
-#     total_no_of_aisles = models.PositiveIntegerField()
-#     location = models.CharField(max_length=250)
+class Blocks(models.Model):
+    total_no_of_blocks = models.PositiveIntegerField()
+    total_no_of_aisles = models.PositiveIntegerField()
+    location = models.CharField(max_length=250)
     
 class metersInfo(models.Model):
-    SITE_TYPE = models.ForeignKey(Site, on_delete=models.CASCADE)
     per_unit_cost = models.FloatField()
     genset_unit_rate = models.FloatField()
     no_of_single_source_meters = models.PositiveIntegerField()
@@ -77,7 +75,7 @@ class customer(models.Model):
     customer_dg_fuel_visible_date = models.DateTimeField(null=True, blank=True)
     is_hourly_data_visible_customer = models.BooleanField(default=False)
 
-class phaseCurrent(models.Model):
+class PFThreshold(models.Model):
     r_phase_pf_threshold = models.FloatField(default=0, blank=True, null=True)
     y_phase_pf_threshold = models.FloatField(default=0, blank=True, null=True)
     b_phase_pf_threshold = models.FloatField(default=0, blank=True, null=True)
@@ -112,18 +110,11 @@ class dg_info(models.Model):
 
 # Aisle group 1NF
 class AisleGroup(models.Model):
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True, blank=True)
     attached_leg_id = models.CharField(max_length=30)
     aisleGroupName = models.CharField(max_length=100)
 
-class aisle_blocks(models.Model):
-    site_name = models.ForeignKey(Site, on_delete=models.CASCADE)
-    total_no_of_blocks = models.PositiveIntegerField()
-    total_no_of_aisles = models.PositiveIntegerField()
-    location = models.CharField(max_length=250)
-
 class lights(models.Model):
-    aisle_blocks = models.ForeignKey(aisle_blocks, on_delete=models.CASCADE)
     total_lights = models.CharField(max_length=10)
     one_light_watt = models.CharField(max_length=30)
 

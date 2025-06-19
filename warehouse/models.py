@@ -26,31 +26,33 @@ class Site(models.Model):
     site_type = models.PositiveIntegerField(choices = SITE_TYPE)
     location = models.CharField(max_length=250)
 
-class aisle_blocks(models.Model):
-    total_no_of_blocks = models.PositiveIntegerField(null=True, blank=True)
-    total_no_of_aisles = models.PositiveIntegerField(null=True, blank=True)
-    location = models.CharField(max_length=250, null=True, blank=True)
+# class aisle_blocks(models.Model):
+#     site_name = models.ForeignKey(Site, on_delete=models.CASCADE)
+#     total_no_of_blocks = models.PositiveIntegerField()
+#     total_no_of_aisles = models.PositiveIntegerField()
+#     location = models.CharField(max_length=250)
     
 class metersInfo(models.Model):
-    per_unit_cost = models.FloatField(null=True, blank=True)
-    genset_unit_rate = models.FloatField(null=True, blank=True)
-    no_of_single_source_meters = models.PositiveIntegerField(null=True, blank=True)
-    no_of_dual_source_meters = models.PositiveIntegerField(null=True, blank=True)
-    is_active = models.BooleanField(null=True, blank=True)
-    is_visible = models.BooleanField(null=True, blank=True)
+    SITE_TYPE = models.ForeignKey(Site, on_delete=models.CASCADE)
+    per_unit_cost = models.FloatField()
+    genset_unit_rate = models.FloatField()
+    no_of_single_source_meters = models.PositiveIntegerField()
+    no_of_dual_source_meters = models.PositiveIntegerField()
+    is_active = models.BooleanField()
+    is_visible = models.BooleanField()
     is_live = models.BooleanField(default=False)
 
 class site_data(models.Model):
-    live_date = models.DateTimeField(null=True, blank=True)
-    baseline_date = models.DateTimeField(null=True, blank=True)
-    current_baseline = models.FloatField(null=True, blank=True)
-    consumed_energy = models.FloatField(null=True, blank=True)
-    total_energy_saved = models.FloatField(null=True, blank=True)
+    live_date = models.DateTimeField()
+    baseline_date = models.DateTimeField()
+    current_baseline = models.FloatField()
+    consumed_energy = models.FloatField()
+    total_energy_saved = models.FloatField()
 
 class site_manager_info(models.Model):
-    site_manager = models.CharField(max_length=50, null=True, blank=True)
-    site_manager_contact = models.CharField(max_length=50, null=True, blank=True)
-    site_manager_email = models.EmailField(max_length=50, null=True, blank=True)
+    site_manager = models.CharField(max_length=50)
+    site_manager_contact = models.CharField(max_length=50)
+    site_manager_email = models.EmailField(max_length=50)
 
 class saving(models.Model):
     avg_saving = models.FloatField(null=True, blank=True)
@@ -114,11 +116,19 @@ class AisleGroup(models.Model):
     attached_leg_id = models.CharField(max_length=30)
     aisleGroupName = models.CharField(max_length=100)
 
+class aisle_blocks(models.Model):
+    site_name = models.ForeignKey(Site, on_delete=models.CASCADE)
+    total_no_of_blocks = models.PositiveIntegerField()
+    total_no_of_aisles = models.PositiveIntegerField()
+    location = models.CharField(max_length=250)
+
 class lights(models.Model):
+    aisle_blocks = models.ForeignKey(aisle_blocks, on_delete=models.CASCADE)
     total_lights = models.CharField(max_length=10)
     one_light_watt = models.CharField(max_length=30)
 
 class consumption(models.Model):
+    AisleGroup = models.ForeignKey(AisleGroup, on_delete=models.CASCADE)
     expected_consumption = models.FloatField(blank=True, null=True)
     cumulative_consumption = models.FloatField(default=0)
 
